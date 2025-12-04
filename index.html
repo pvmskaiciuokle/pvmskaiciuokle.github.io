@@ -4,710 +4,809 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="xkupBJD4mlE9usbClUPyfZeHkD4EeqNdD68vpMqcj9s" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlyginimo Skaičiuoklė 2025</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>PVM Skaičiuoklė | Greitas ir Tikslus PVM Skaičiavimas Lietuvoje</title>
+    <meta name="description" content="Nemokama PVM skaičiuoklė leidžianti greitai ir tiksliai apskaičiuoti PVM sumą Lietuvoje. Pridėkite arba atimkite PVM iš kainos su skirtingais tarifais.">
+    <meta name="keywords" content="pvm skaiciuokle, pvm skaiciavimas, pvm tarifai, pvm kalkuliatorius, pvm lietuvoje, pridėtinės vertės mokestis">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💰%3C/text%3E%3C/svg%3E">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #10B981;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #10B981;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #2d3748;
         }
-        /* Custom number input styling */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
-        .card-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: box-shadow 0.3s ease;
+
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            font-weight: 600;
         }
-        .card-shadow:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        .calculator-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        .tooltip {
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        input:read-only {
+            background: #f7fafc;
+            cursor: default;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        select {
+            cursor: pointer;
+            max-width: 200px;
+        }
+
+        .result-text-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-text {
+            flex: 1;
+            padding: 12px 16px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+        }
+
+        .copy-btn {
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #718096;
+        }
+
+        .copy-btn:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn.copied {
+            background: #c6f6d5;
+            border-color: #9ae6b4;
+            color: #22543d;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .info-section h2 {
+            font-size: 1.4rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .faq-answer {
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .rate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .rate-table th, .rate-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .rate-table th {
+            background-color: #f7fafc;
+            font-weight: 600;
+        }
+
+        .rate-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 25px;
             position: relative;
         }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 220px;
-            background-color: #1F2937;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
+
+        .timeline-date {
+            flex: 0 0 120px;
+            font-weight: 600;
+            color: #4299e1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
             position: absolute;
+            left: -6px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4299e1;
+            z-index: 2;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 60px;
+            top: 20px;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
             z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -110px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
         }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+
+        .highlight-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
         }
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #1F2937 transparent transparent transparent;
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+                margin-bottom: 30px;
+            }
+
+            .calculator-section, .info-section {
+                padding: 25px 20px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+                margin-bottom: 25px;
+            }
+
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .copy-btn {
+                display: none;
+            }
+
+            input, select {
+                font-size: 16px;
+            }
+
+            select {
+                max-width: 100%;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+            }
+
+            .timeline-date {
+                margin-bottom: 5px;
+            }
+
+            .timeline-content {
+                padding-left: 0;
+            }
+
+            .timeline-content::before {
+                display: none;
+            }
+
+            .timeline-line {
+                display: none;
+            }
         }
-        .result-highlight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .employer-highlight {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-        .employee-highlight {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        .tabs-active {
-            background-color: #3B82F6;
-            color: white;
-        }
-        .tabs-inactive {
-            background-color: #F3F4F6;
-            color: #6B7280;
+
+        @media (max-width: 480px) {
+            .calculator-section, .info-section {
+                padding: 20px 15px;
+            }
+
+            .input-group {
+                margin-bottom: 25px;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body>
+    <div class="container">
+        <h1>PVM Skaičiuoklė</h1>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">
-                    <i class="fa-solid fa-calculator text-xl"></i>
-                </div>
-                <h1 class="text-xl font-bold text-gray-900 tracking-tight">Atlyginimo Skaičiuoklė <span class="text-blue-600">2025</span></h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="text-sm text-gray-500 font-medium">Lietuva 🇱🇹</div>
-                <a href="/minimali-alga" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Minimali alga</a>
-                <a href="/istoriniai-duomenys-npd" class="text-sm text-blue-600 hover:text-blue-800 font-medium">NPD duomenys</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8">
-        
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- VAT Calculation Section -->
+        <div class="calculator-section">
+            <h2 class="section-title">PVM pridėjimas</h2>
             
-            <!-- Left Panel - Inputs -->
-            <div class="lg:col-span-1 space-y-6">
-                
-                <!-- Card - Main Inputs -->
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Duomenų įvedimas</h2>
-                    
-                    <!-- Calculation Type Tabs -->
-                    <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-                        <button id="btnGross" class="flex-1 py-2 text-sm font-medium rounded-lg shadow-sm tabs-active transition-all duration-200" onclick="setMode('gross')">Ant popieriaus</button>
-                        <button id="btnNet" class="flex-1 py-2 text-sm font-medium rounded-lg tabs-inactive transition-all duration-200" onclick="setMode('net')">Į rankas</button>
-                        <button id="btnCost" class="flex-1 py-2 text-sm font-medium rounded-lg tabs-inactive transition-all duration-200" onclick="setMode('cost')">Darbo vietos kaina</button>
-                    </div>
-
-                    <!-- Amount Input -->
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2" id="amountLabel">Atlyginimas ant popieriaus</label>
-                        <div class="relative rounded-md shadow-sm">
-                            <input type="number" id="salaryInput" class="block w-full pl-4 pr-12 py-3 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold text-gray-900 border" placeholder="0.00" value="1038">
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                <span class="text-gray-500 font-medium">€</span>
-                            </div>
-                        </div>
-                        <p class="mt-2 text-xs text-gray-500">MMA (2025 m.): 1038 €</p>
-                    </div>
-
-                    <!-- Advanced Settings -->
-                    <div class="space-y-4">
-                        
-                        <!-- NPD Settings -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Neapmokestinamas pajamų dydis (NPD)
-                                <span class="tooltip ml-1">
-                                    <i class="fas fa-info-circle text-gray-400"></i>
-                                    <span class="tooltiptext">NPD taikomas tik tuo atveju, jeigu darbuotojas darbdaviui pateikia prašymą jį taikyti.</span>
-                                </span>
-                            </label>
-                            <select id="npdSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="auto">Taikomas standartinis</option>
-                                <option value="0">Netaikomas</option>
-                                <option value="disabled">Riboto darbingumo (0-25%)</option>
-                                <option value="partial">Riboto darbingumo (30-55%)</option>
-                            </select>
-                        </div>
-
-                        <!-- Pension -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Papildomas pensijos kaupimas
-                                <span class="tooltip ml-1">
-                                    <i class="fas fa-info-circle text-gray-400"></i>
-                                    <span class="tooltiptext">Darbuotojo kaupimas papildomam pensijų draudimui</span>
-                                </span>
-                            </label>
-                            <select id="pensionSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="0">Nekaupia (0%)</option>
-                                <option value="1.5">Kaupia palaipsniui (1.5%)</option>
-                                <option value="3">Kaupia maksimaliai (3%)</option>
-                            </select>
-                        </div>
-
-                        <!-- Contract Type -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Sutarties tipas</label>
-                            <select id="contractType" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="indefinite">Neterminuota</option>
-                                <option value="fixed">Terminuota</option>
-                            </select>
-                        </div>
-
-                        <!-- Employer Type -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Darbdavio tipas</label>
-                            <select id="employerType" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="private">Privatus</option>
-                                <option value="state">Valstybės</option>
-                                <option value="municipality">Savivaldybės</option>
-                            </select>
-                        </div>
-
-                        <!-- Employer Group -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Darbdavio grupė
-                                <span class="tooltip ml-1">
-                                    <i class="fas fa-info-circle text-gray-400"></i>
-                                    <span class="tooltiptext">Dauguma darbdavių priklauso I grupei. Kitoms grupėms darbdavys priskiriamas jeigu yra įvykę nelaimingų atsitikimų.</span>
-                                </span>
-                            </label>
-                            <select id="employerGroup" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="1">I grupė</option>
-                                <option value="2">II grupė</option>
-                                <option value="3">III grupė</option>
-                            </select>
-                        </div>
-
-                        <!-- Year Selection -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Metai</label>
-                            <select id="yearSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                <option value="2025">2025</option>
-                                <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <!-- Action Button -->
-                    <button onclick="calculate()" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 flex items-center justify-center space-x-2">
-                        <span>Skaičiuoti</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-
-                <!-- Info Box -->
-                <div class="bg-blue-50 rounded-xl p-4 border border-blue-100 text-sm text-blue-800">
-                    <div class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-info mt-1"></i>
-                        <p>Skaičiavimai atliekami pagal <strong>2025 m.</strong> sausio 1 d. įsigaliojusias mokesčių tarykles (MMA 1038 €, naujos NPD formulės).</p>
-                    </div>
-                </div>
-
+            <div class="input-group">
+                <label>PVM tarifas</label>
+                <select id="calc-vat-rate">
+                    <option value="21">21%</option>
+                    <option value="9">9%</option>
+                    <option value="5">5%</option>
+                </select>
             </div>
 
-            <!-- Right Panel - Results -->
-            <div class="lg:col-span-2 space-y-6">
-                
-                <!-- Main Result Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-blue-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
-                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Į Rankas (Neto)</p>
-                        <p id="resNet" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
-                        <p class="text-xs text-green-600 mt-1 flex items-center font-medium">
-                            <i class="fa-solid fa-check mr-1"></i> Išmokama darbuotojui
-                        </p>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-gray-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
-                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Ant Popieriaus (Bruto)</p>
-                        <p id="resGross" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
-                        <p class="text-xs text-gray-500 mt-1">Sutartyje numatytas atlygis</p>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-purple-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
-                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Darbo Vietos Kaina</p>
-                        <p id="resTotalCost" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
-                        <p class="text-xs text-purple-600 mt-1 flex items-center font-medium">
-                            <i class="fa-solid fa-building mr-1"></i> Darbdavio išlaidos
-                        </p>
+            <div class="input-group">
+                <label>Kaina be PVM</label>
+                <div class="input-row">
+                    <input type="number" id="calc-price-excl" placeholder="0.00" step="0.01" min="0">
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="calc-price-excl-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('calc-price-excl-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Detailed Breakdown -->
-                <div class="bg-white rounded-xl card-shadow overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
-                        <h3 class="font-semibold text-gray-800">Mokesčių Išklotinė</h3>
-                        <span class="text-xs font-mono bg-gray-200 text-gray-600 px-2 py-1 rounded">EUR</span>
-                    </div>
-                    
-                    <div class="divide-y divide-gray-100">
-                        <!-- NPD Row -->
-                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs">
-                                    NPD
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Taikytas NPD</p>
-                                    <p class="text-xs text-gray-400">Neapmokestinamas pajamų dydis</p>
-                                </div>
-                            </div>
-                            <span id="resNPD" class="text-sm font-semibold text-gray-700">0.00 €</span>
-                        </div>
-
-                        <!-- GPM Row -->
-                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
-                                    GPM
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Gyventojų pajamų mokestis</p>
-                                    <p class="text-xs text-gray-400">20% (nuo sumos virš NPD)</p>
-                                </div>
-                            </div>
-                            <span id="resGPM" class="text-sm font-semibold text-red-600">- 0.00 €</span>
-                        </div>
-
-                        <!-- PSD Row -->
-                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
-                                    PSD
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Privalomas sveikatos draudimas</p>
-                                    <p class="text-xs text-gray-400">6.98%</p>
-                                </div>
-                            </div>
-                            <span id="resPSD" class="text-sm font-semibold text-red-600">- 0.00 €</span>
-                        </div>
-
-                        <!-- VSD Row -->
-                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
-                                    VSD
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Valstybinis socialinis draudimas</p>
-                                    <p class="text-xs text-gray-400">12.52%</p>
-                                </div>
-                            </div>
-                            <span id="resVSD" class="text-sm font-semibold text-red-600">- 0.00 €</span>
-                        </div>
-
-                        <!-- Pension Row (Conditional) -->
-                        <div id="rowPension" class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors bg-orange-50/30 hidden">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-xs">
-                                    II
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Pensijų kaupimas</p>
-                                    <p class="text-xs text-gray-400">Papildomai</p>
-                                </div>
-                            </div>
-                            <span id="resPension" class="text-sm font-semibold text-orange-600">- 0.00 €</span>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="h-1 bg-gray-50 border-t border-b border-gray-100"></div>
-
-                        <!-- Employer Tax Row -->
-                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors bg-gray-50">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">
-                                    <i class="fa-solid fa-building"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-700">Darbdavio mokesčiai (Sodra)</p>
-                                    <p class="text-xs text-gray-400" id="employerRateText">1.77% (ant viršaus)</p>
-                                </div>
-                            </div>
-                            <span id="resEmployerTax" class="text-sm font-semibold text-gray-700">0.00 €</span>
-                        </div>
-
-                        <!-- Payment Information -->
-                        <div class="bg-gray-50 p-4">
-                            <h4 class="text-sm font-semibold text-gray-700 mb-3">Mokėjimo informacija</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="bg-white p-3 rounded-lg border border-gray-200">
-                                    <p class="text-xs text-gray-500 mb-1">Sodrai mokėtina suma</p>
-                                    <p id="resSodra" class="text-sm font-semibold text-gray-800">0.00 €</p>
-                                    <p class="text-xs text-gray-400 mt-1">Įmokos kodas 252</p>
-                                    <a href="https://www.sodra.lt/surenkamosios-saskaitos" target="_blank" class="text-xs text-blue-600 hover:underline">Sodros sąskaitos</a>
-                                </div>
-                                <div class="bg-white p-3 rounded-lg border border-gray-200">
-                                    <p class="text-xs text-gray-500 mb-1">Mokesčių inspekcijai mokėtina suma</p>
-                                    <p id="resVMI" class="text-sm font-semibold text-gray-800">0.00 €</p>
-                                    <p class="text-xs text-gray-400 mt-1">Įmokos kodas 1311</p>
-                                    <a href="https://www.vmi.lt/evmi/saskaitos-ir-imoku-kodai" target="_blank" class="text-xs text-blue-600 hover:underline">VMI sąskaitos</a>
-                                </div>
-                            </div>
-                        </div>
-
+            <div class="input-group">
+                <label>PVM suma</label>
+                <div class="input-row">
+                    <input type="text" id="calc-vat-amount" readonly>
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="calc-vat-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('calc-vat-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Additional Information -->
-                <div class="bg-white rounded-xl card-shadow p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4">Mokesčių tarifai (2025 m.)</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mokestis</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarifas</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mokėtojas</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Gyventojų pajamų mokestis (GPM)</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">20%</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Privalomas sveikatos draudimas (PSD)</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">6.98%</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Valstybinis socialinis draudimas (VSD)</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">12.52%</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbdavio VSD įmoka</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">1.77%</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbdavys</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Papildomas pensijų kaupimas</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">1.5% arba 3%</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="input-group">
+                <label>Kaina su PVM</label>
+                <div class="input-row">
+                    <input type="text" id="calc-price-incl" readonly>
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="calc-price-incl-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('calc-price-incl-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
-        
-        <div class="mt-8 text-center text-gray-400 text-xs">
-            <p>© 2025 Atlyginimo Skaičiuoklė. Informacinio pobūdžio. Patikrino audito įmonė UAB "Tezaurus auditas".</p>
+
+        <!-- VAT Deduction Section -->
+        <div class="calculator-section">
+            <h2 class="section-title">PVM atėmimas</h2>
+            
+            <div class="input-group">
+                <label>PVM tarifas</label>
+                <select id="deduct-vat-rate">
+                    <option value="21">21%</option>
+                    <option value="9">9%</option>
+                    <option value="5">5%</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Kaina su PVM</label>
+                <div class="input-row">
+                    <input type="number" id="deduct-price-incl" placeholder="0.00" step="0.01" min="0">
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="deduct-price-incl-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('deduct-price-incl-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>PVM suma</label>
+                <div class="input-row">
+                    <input type="text" id="deduct-vat-amount" readonly>
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="deduct-vat-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('deduct-vat-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Kaina be PVM</label>
+                <div class="input-row">
+                    <input type="text" id="deduct-price-excl" readonly>
+                    <div class="result-text-wrapper">
+                        <div class="result-text" id="deduct-price-excl-words"></div>
+                        <button class="copy-btn" onclick="copyToClipboard('deduct-price-excl-words', this)" title="Kopijuoti">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </main>
+        <!-- Introduction Section -->
+        <div class="info-section">
+            <h2>Kas yra PVM skaičiuoklė ir kam ji reikalinga?</h2>
+            <p>Pridėtinės vertės mokestis (PVM) – tai vienas iš pagrindinių suvartojimo mokesčių, kurį moka dauguma prekių ir paslaugų pirkėjų Lietuvoje. Mūsų PVM skaičiuoklė yra profesionalus ir patogus įrankis, skirtas kiekvienam, kuris dirba su kainomis, kuriose įtrauktas PVM.</p>
+            
+            <div class="highlight-box">
+                <p>Ši nemokama PVM skaičiuoklė padės jums ne tik greitai apskaičiuoti PVM sumą, bet ir gauti rezultatus lietuvių kalba, kas yra ypač naudinga formuojant dokumentus ar sąskaitas.</p>
+            </div>
+
+            <p>Naudojant šį skaičiavimo įrankį, galite:</p>
+            <ul>
+                <li>Greitai apskaičiuoti PVM sumą pagal skirtingus tarifus</li>
+                <li>Pridėti PVM prie kainos be PVM</li>
+                <li>Atimti PVM iš kainos su PVM</li>
+                <li>Gauti skaičiavimo rezultatus žodžiais</li>
+                <li>Kopijuoti rezultatus vienu paspaudimu</li>
+            </ul>
+        </div>
+
+        <!-- VAT History Section -->
+        <div class="info-section">
+            <h2>PVM istorija Lietuvoje</h2>
+            <p>Pridėtinės vertės mokestis Lietuvoje buvo įvestas atkūrus šalies nepriklausomybę. Šis mokestis tapo vienu iš pagrindinių valstybės biudžeto formavimo šaltinių ir svarbiu Europos Sąjungos integracijos elementu.</p>
+            
+            <div class="timeline">
+                <div class="timeline-line"></div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1992 m.</div>
+                    <div class="timeline-content">
+                        <p><strong>PVM įvedimas</strong> – Lietuvoje oficialiai įvestas pridėtinės vertės mokestis, pakeitęs anksčiau gyvavusį apyvartos mokestį. Pradinis standartinis tarifas buvo 18%.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">1993 m.</div>
+                    <div class="timeline-content">
+                        <p><strong>Tarifų diversifikacija</strong> – įvesti sumažinti PVM tarifai: 9% ir 5%, taikomi tam tikroms socialinės svarbos prekėms ir paslaugoms.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2004 m.</div>
+                    <div class="timeline-content">
+                        <p><strong>Įstojimas į ES</strong> – Lietuvai įstojus į Europos Sąjungą, PVM sistema buvo pilnai harmonizuota su ES direktyvomis, o standartinis tarifas padidintas iki 21%.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2009 m.</div>
+                    <div class="timeline-content">
+                        <p><strong>Laikinas tarifų mažinimas</strong> – siekiant skatinti ekonomiką po krizės, laikinai sumažintas standartinis PVM tarifas iki 19%, tačiau 2011 m. jis grąžintas į 21%.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2024 m.</div>
+                    <div class="timeline-content">
+                        <p><strong>Dabartinė situacija</strong> – PVM sistema Lietuvoje visiškai atitinka Europos Sąjungos reikalavimus, o šis mokestis sudaro apie 40% visų valstybės biudžeto mokesčių pajamų.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAT Rates Information -->
+        <div class="info-section">
+            <h2>PVM tarifai Lietuvoje ir jų taikymas</h2>
+            <p>Lietuvoje taikomi trys pagrindiniai PVM tarifai, kurių kiekvienas turi savo specifinį paskirtį ir taikymo sritį. Suprasti šių tarifų skirtumus yra svarbu kiekvienam verslui ir vartotojui.</p>
+            
+            <table class="rate-table">
+                <tr>
+                    <th>Tarifas</th>
+                    <th>Taikymo sritis</th>
+                    <th>Pavyzdžiai</th>
+                </tr>
+                <tr>
+                    <td><strong>21%</strong></td>
+                    <td>Standartinis tarifas</td>
+                    <td>Dauguma prekių ir paslaugų: drabužiai, elektronika, restoranų paslaugos, transporto paslaugos</td>
+                </tr>
+                <tr>
+                    <td><strong>9%</strong></td>
+                    <td>Sumažintas tarifas</td>
+                    <td>Knygos ir leidiniai, viešbučių apgyvendinimo paslaugos, bilietai į kultūros renginius, šildymas</td>
+                </tr>
+                <tr>
+                    <td><strong>5%</strong></td>
+                    <td>Specialus tarifas</td>
+                    <td>Vaistai ir medicinos priemonės, žurnalai ir laikraščiai, vaikų maistas, invalidų techninės pagalbos priemonės</td>
+                </tr>
+            </table>
+
+            <div class="highlight-box">
+                <p><strong>Svarbi informacija:</strong> Kai kurios prekės ir paslaugos gali būti apmokestinamos nulinu PVM tarifu (0%) arba visiškai atleistos nuo PVM. Tai dažniausiai susiję su eksporto operacijomis, tarptautiniu transportu ar kitomis specialiomis situacijomis.</p>
+            </div>
+        </div>
+
+        <!-- How to Use Section -->
+        <div class="info-section">
+            <h2>Kaip naudoti mūsų skaičiavimo įrankį?</h2>
+            <p>Mūsų PVM skaičiuoklė sukurta taip, kad kiekvienas galėtų ja naudotis be jokių sunkumų. Nesvarbu, ar esate profesionalus buhalteris, ar tik pradedantysis verslininkas – šis įrankis padarys PVM skaičiavimą paprastu ir greitu.</p>
+            
+            <h3 style="margin-top: 25px; margin-bottom: 15px; color: #4a5568;">PVM pridėjimas:</h3>
+            <ol style="margin-left: 20px; margin-bottom: 20px; color: #4a5568;">
+                <li>Pasirinkite pageidaujamą PVM tarifą iš iššokančiojo meniu</li>
+                <li>Įveskite kainą be PVM laukelyje</li>
+                <li>Automatiškai gausite PVM sumą ir galutinę kainą su PVM</li>
+                <li>Spustelėkite kopijavimo mygtuką, jei norite nukopijuoti rezultatą</li>
+            </ol>
+
+            <h3 style="margin-top: 25px; margin-bottom: 15px; color: #4a5568;">PVM atėmimas:</h3>
+            <ol style="margin-left: 20px; margin-bottom: 20px; color: #4a5568;">
+                <li>Pasirinkite tinkamą PVM tarifą</li>
+                <li>Įveskite kainą su PVM</li>
+                <li>Sistema automatiškai apskaičiuos kainą be PVM ir atskirą PVM sumą</li>
+                <li>Galite nukopijuoti bet kurį iš gautų rezultatų</li>
+            </ol>
+
+            <p>Visi skaičiavimai atliekami realiu laiku, todėl iš karto matote rezultatus be jokių uždelstų. Be to, kiekvienas skaičius automatiškai konvertuojamas į lietuviškus žodžius, kas ypač naudinga formuojant oficialius dokumentus.</p>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="info-section">
+            <h2>Dažnai užduodami klausimai apie PVM</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Kas yra PVM ir kam jis reikalingas?</div>
+                <div class="faq-answer">
+                    <p>Pridėtinės vertės mokestis (PVM) – tai suvartojimo mokestis, kurį moka pirkėjai už prekes ar paslaugas. Šis mokestis pridedamas prie prekių ir paslaugų kainos ir surenkamas valstybės. PVM yra vienas iš pagrindinių valstybės biudžeto pajamų šaltinių, skirtas finansuoti viešuosius poreikius: švietimą, sveikatos apsaugą, infrastruktūrą ir kitas svarbias sritis.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Kaip teisingai apskaičiuoti PVM?</div>
+                <div class="faq-answer">
+                    <p>PVM apskaičiuojamas padauginus kainą be PVM iš PVM tarifo (išreikšto dešimtainiu skaičiumi). Pavyzdžiui, jei kaina be PVM yra 100 €, o PVM tarifas – 21%, tai PVM suma bus 21 € (100 × 0.21), o kaina su PVM – 121 €. Atvirkščiam skaičiavimui (kai reikia atskirti PVM), kainą su PVM reikia padalinti iš (1 + PVM tarifas).</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Kada galima taikyti sumažintus PVM tarifus?</div>
+                <div class="faq-answer">
+                    <p>Sumažinti PVM tarifai (9% ir 5%) taikomi griežtai apibrėžtoms prekėms ir paslaugoms, kurias nustato Valstybinė mokesčių inspekcija atsižvelgiant į Lietuvos Respublikos PVM įstatymą ir Europos Sąjungos direktyvas. Prieš taikydami sumažintą tarifą, būtina įsitikinti, kad jūsų prekė ar paslauga atitinka visus reikalavimus.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Kas turi teisę atsisakyti PVM mokėjimo?</div>
+                <div class="faq-answer">
+                    <p>Lietuvoje verslo subjektai gali būti atleisti nuo PVM mokėjimo, jei jų apyvarta per paskutinius 12 mėnesių neviršija 45 000 eurų. Taip pat atleidimas taikomas tam tikroms specifinėms veiklos rūšims, pvz., gydytojams, odontologams, fizioterapeutams ir kitiems sveikatos priežiūros specialistams, dirbantiems kaip individualios veiklos subjektai.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Kaip PVM skaičiuoklė padeda verslui?</div>
+                <div class="faq-answer">
+                    <p>PVM skaičiuoklė yra neįkainojamas įrankis verslui, nes ji sutaupo laiko ir užtikrina skaičiavimų tikslumą. Ji padeda greitai formuoti sąskaitas, kainoraščius, sandorių sutartis, taip pat lengvai apskaičiuoti PVM grąžinimą ar mokėtiną sumą. Be to, mūsų skaičiuoklės funkcija konvertuoti skaičius į žodžius ypač naudinga formuojant oficialius dokumentus.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="info-section">
+            <h2>Naudingi patarimai dirbant su PVM</h2>
+            <p>Dirbant su PVM svarbu ne tik tiksliai skaičiuoti, bet ir suprasti pagrindinius principus bei galimybes. Šie patarimai padės jums efektyviai valdyti PVM procesus.</p>
+            
+            <div class="highlight-box">
+                <p><strong>1. Laikykitės terminų</strong> – PVM deklaracijas teikti būtina iki 25 dienos mėnesio, einančio po ataskaitinio laikotarpio. Vėlavimas gali būti baudžiamas.</p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>2. Saugokite dokumentus</strong> – visi PVM dokumentai (sąskaitos-faktūros, PVM sąskaitos) turi būti saugomi ne mažiau kaip 10 metų nuo jų pateikimo dienos.</p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>3. Naudokite elektronines sistemas</strong> – VMI "Mano VMI" sistema leidžia elektroniniu būdu teikti deklaracijas ir gauti svarbią informaciją apie PVM.</p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>4. Konsultuokitės su specialistais</strong> – sudėtingesniais atvejais, ypač kai susiduriate su tarptautine prekyba ar nestandartinėmis operacijomis, verta pasikonsultuoti su buhalteriu ar mokesčių konsultantu.</p>
+            </div>
+            
+            <p>Mūsų PVM skaičiuoklė yra tik vienas iš įrankių, kuris gali padėti jums valdyti PVM procesus. Reguliariai naudojant šį įrankį kartu su kitomis gerosios buhalterinės praktikos priemonėmis, galite būti tikri, kad jūsų PVM skaičiavimai bus tikslūs ir laiku atlikti.</p>
+        </div>
+    </div>
 
     <script>
-        // --- Constants 2025 ---
-        const CONSTANTS = {
-            MMA: 1038,
-            NPD_BASE_1: 747,
-            NPD_LIMIT_1: 1038, // Up to this, fixed 747
-            NPD_LIMIT_2: 2387.29, // Threshold for formula change
-            NPD_FORMULA_1_FACTOR: 0.49,
-            NPD_FORMULA_2_BASE: 400,
-            NPD_FORMULA_2_SUBTRACT: 642,
-            NPD_FORMULA_2_FACTOR: 0.18,
-            NPD_DISABLED: 1127, // For 0-25% work capacity
-            NPD_PARTIAL: 1057, // For 30-55% work capacity
+        // Lithuanian number to words conversion
+        const ones = ['', 'vienas', 'du', 'trys', 'keturi', 'penki', 'šeši', 'septyni', 'aštuoni', 'devyni'];
+        const teens = ['dešimt', 'vienuolika', 'dvylika', 'trylika', 'keturiolika', 'penkiolika', 'šešiolika', 'septyniolika', 'aštuoniolika', 'devyniolika'];
+        const tens = ['', 'dešimt', 'dvidešimt', 'trisdešimt', 'keturiasdešimt', 'penkiasdešimt', 'šešiasdešimt', 'septyniasdešimt', 'aštuoniasdešimt', 'devyniasdešimt'];
+        const hundreds = ['', 'vienas šimtas', 'du šimtai', 'trys šimtai', 'keturi šimtai', 'penki šimtai', 'šeši šimtai', 'septyni šimtai', 'aštuoni šimtai', 'devyni šimtai'];
+
+        function numberToWords(num) {
+            if (num === 0) return 'nulis';
             
-            RATE_GPM: 0.20,
-            RATE_PSD: 0.0698,
-            RATE_VSD: 0.1252,
-            RATE_EMPLOYER_1: 0.0177, // Group 1
-            RATE_EMPLOYER_2: 0.0217, // Group 2
-            RATE_EMPLOYER_3: 0.0277, // Group 3
-        };
-
-        // --- State ---
-        let state = {
-            mode: 'gross', // 'gross', 'net', or 'cost'
-            amount: 1038,
-            npdType: 'auto', // 'auto', '0', 'disabled', 'partial'
-            pensionRate: 0.0,
-            contractType: 'indefinite', // 'indefinite' or 'fixed'
-            employerType: 'private', // 'private', 'state', 'municipality'
-            employerGroup: '1', // '1', '2', or '3'
-            year: '2025'
-        };
-
-        // --- Core Logic ---
-
-        function calculateNPD(gross) {
-            if (state.npdType === '0') return 0;
-            if (state.npdType === 'disabled') return CONSTANTS.NPD_DISABLED;
-            if (state.npdType === 'partial') return CONSTANTS.NPD_PARTIAL;
+            let result = [];
             
-            // Auto NPD calculation
-            if (gross <= 0) return 0;
-
-            let npd = 0;
-
-            if (gross <= CONSTANTS.NPD_LIMIT_1) {
-                // Formula: Fixed 747
-                npd = CONSTANTS.NPD_BASE_1;
-            } else if (gross <= CONSTANTS.NPD_LIMIT_2) {
-                // Formula: 747 - 0.49 * (Gross - 1038)
-                npd = CONSTANTS.NPD_BASE_1 - CONSTANTS.NPD_FORMULA_1_FACTOR * (gross - CONSTANTS.NPD_LIMIT_1);
+            // Thousands
+            const thousands = Math.floor(num / 1000);
+            if (thousands > 0) {
+                if (thousands === 1) {
+                    result.push('vienas tūkstantis');
+                } else if (thousands < 10) {
+                    result.push(ones[thousands] + ' tūkstančiai');
+                } else if (thousands < 20) {
+                    result.push(teens[thousands - 10] + ' tūkstančių');
+                } else {
+                    const t = Math.floor(thousands / 10);
+                    const o = thousands % 10;
+                    if (o === 0) {
+                        result.push(tens[t] + ' tūkstančių');
+                    } else {
+                        result.push(tens[t] + ' ' + ones[o] + ' tūkstančiai');
+                    }
+                }
+            }
+            
+            // Hundreds, tens, ones
+            const remainder = num % 1000;
+            const h = Math.floor(remainder / 100);
+            const t = Math.floor((remainder % 100) / 10);
+            const o = remainder % 10;
+            
+            if (h > 0) result.push(hundreds[h]);
+            
+            if (t === 1) {
+                result.push(teens[o]);
             } else {
-                // Formula: 400 - 0.18 * (Gross - 642)
-                npd = CONSTANTS.NPD_FORMULA_2_BASE - CONSTANTS.NPD_FORMULA_2_FACTOR * (gross - CONSTANTS.NPD_FORMULA_2_SUBTRACT);
+                if (t > 0) result.push(tens[t]);
+                if (o > 0 && t !== 1) result.push(ones[o]);
             }
-
-            // NPD cannot be negative or larger than gross (practically)
-            // Actually tax cannot be negative. If NPD > Gross, Tax Base is 0.
-            return Math.max(0, npd);
+            
+            return result.join(' ');
         }
 
-        function getEmployerRate() {
-            switch (state.employerGroup) {
-                case '1': return CONSTANTS.RATE_EMPLOYER_1;
-                case '2': return CONSTANTS.RATE_EMPLOYER_2;
-                case '3': return CONSTANTS.RATE_EMPLOYER_3;
-                default: return CONSTANTS.RATE_EMPLOYER_1;
+        function numberToLithuanian(value) {
+            if (!value || isNaN(value)) return '';
+            
+            const euros = Math.floor(value);
+            const cents = Math.round((value - euros) * 100);
+            
+            let result = [];
+            
+            // Euros
+            if (euros === 0) {
+                result.push('nulis eurų');
+            } else if (euros === 1) {
+                result.push('vienas euras');
+            } else if (euros % 10 === 0 && euros !== 10) {
+                result.push(numberToWords(euros) + ' eurų');
+            } else {
+                result.push(numberToWords(euros) + ' eurai');
             }
-        }
-
-        function calculateFromGross(gross) {
-            const npd = calculateNPD(gross);
-            const taxBaseGPM = Math.max(0, gross - npd);
             
-            const gpm = taxBaseGPM * CONSTANTS.RATE_GPM;
-            const psd = gross * CONSTANTS.RATE_PSD;
-            const vsd = gross * CONSTANTS.RATE_VSD;
-            const pension = gross * state.pensionRate;
-            
-            const totalDeductions = gpm + psd + vsd + pension;
-            const net = gross - totalDeductions;
-            
-            const employerRate = getEmployerRate();
-            const employerTax = gross * employerRate;
-            const totalCost = gross + employerTax;
-            
-            // Calculate Sodra and VMI payment amounts
-            const sodraPayment = vsd + psd + employerTax;
-            const vmiPayment = gpm;
-
-            return {
-                gross: gross,
-                net: net,
-                npd: npd,
-                gpm: gpm,
-                psd: psd,
-                vsd: vsd,
-                pension: pension,
-                employerTax: employerTax,
-                totalCost: totalCost,
-                sodraPayment: sodraPayment,
-                vmiPayment: vmiPayment,
-                employerRate: employerRate
-            };
-        }
-
-        function calculateFromNet(targetNet) {
-            // Binary search to find Gross that yields this Net
-            let low = targetNet; 
-            let high = targetNet * 2.5; // Initial estimation range
-            let gross = low;
-            let result = null;
-            
-            // Expand range if needed
-            let iterations = 0;
-            while (calculateFromGross(high).net < targetNet && iterations < 20) {
-                high *= 1.5;
-                iterations++;
-            }
-
-            // Binary search
-            for (let i = 0; i < 50; i++) {
-                gross = (low + high) / 2;
-                result = calculateFromGross(gross);
-                
-                if (Math.abs(result.net - targetNet) < 0.01) {
-                    break;
-                }
-                
-                if (result.net < targetNet) {
-                    low = gross;
+            // Cents
+            if (cents > 0) {
+                if (cents === 1) {
+                    result.push(numberToWords(cents) + ' centas');
+                } else if (cents % 10 === 0 && cents !== 10) {
+                    result.push(numberToWords(cents) + ' centų');
                 } else {
-                    high = gross;
+                    result.push(numberToWords(cents) + ' centai');
                 }
             }
             
-            return result;
+            return result.join(', ');
         }
 
-        function calculateFromCost(targetCost) {
-            // Binary search to find Gross that yields this Cost
-            let low = targetCost * 0.8; // Initial estimation range
-            let high = targetCost;
-            let gross = low;
-            let result = null;
+        // Calculation section
+        function calculateVAT() {
+            const rate = parseFloat(document.getElementById('calc-vat-rate').value) / 100;
+            const priceExcl = parseFloat(document.getElementById('calc-price-excl').value) || 0;
             
-            // Binary search
-            for (let i = 0; i < 50; i++) {
-                gross = (low + high) / 2;
-                result = calculateFromGross(gross);
-                
-                if (Math.abs(result.totalCost - targetCost) < 0.01) {
-                    break;
-                }
-                
-                if (result.totalCost < targetCost) {
-                    low = gross;
-                } else {
-                    high = gross;
-                }
-            }
+            const vatAmount = priceExcl * rate;
+            const priceIncl = priceExcl + vatAmount;
             
-            return result;
+            document.getElementById('calc-vat-amount').value = vatAmount.toFixed(2);
+            document.getElementById('calc-price-incl').value = priceIncl.toFixed(2);
+            
+            document.getElementById('calc-price-excl-words').textContent = numberToLithuanian(priceExcl);
+            document.getElementById('calc-vat-words').textContent = numberToLithuanian(vatAmount);
+            document.getElementById('calc-price-incl-words').textContent = numberToLithuanian(priceIncl);
         }
 
-        // --- UI Handling ---
-
-        function setMode(newMode) {
-            state.mode = newMode;
+        // Deduction section
+        function deductVAT() {
+            const rate = parseFloat(document.getElementById('deduct-vat-rate').value) / 100;
+            const priceIncl = parseFloat(document.getElementById('deduct-price-incl').value) || 0;
             
-            const btnGross = document.getElementById('btnGross');
-            const btnNet = document.getElementById('btnNet');
-            const btnCost = document.getElementById('btnCost');
-            const label = document.getElementById('amountLabel');
+            const priceExcl = priceIncl / (1 + rate);
+            const vatAmount = priceIncl - priceExcl;
+            
+            document.getElementById('deduct-vat-amount').value = vatAmount.toFixed(2);
+            document.getElementById('deduct-price-excl').value = priceExcl.toFixed(2);
+            
+            document.getElementById('deduct-price-incl-words').textContent = numberToLithuanian(priceIncl);
+            document.getElementById('deduct-vat-words').textContent = numberToLithuanian(vatAmount);
+            document.getElementById('deduct-price-excl-words').textContent = numberToLithuanian(priceExcl);
+        }
 
-            // Reset all buttons
-            [btnGross, btnNet, btnCost].forEach(btn => {
-                btn.classList.remove('tabs-active');
-                btn.classList.add('tabs-inactive');
+        // Copy to clipboard
+        function copyToClipboard(elementId, button) {
+            const text = document.getElementById(elementId).textContent;
+            
+            if (!text) return;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 1500);
             });
-            
-            // Activate selected button
-            if (newMode === 'gross') {
-                btnGross.classList.remove('tabs-inactive');
-                btnGross.classList.add('tabs-active');
-                label.textContent = "Atlyginimas ant popieriaus";
-            } else if (newMode === 'net') {
-                btnNet.classList.remove('tabs-inactive');
-                btnNet.classList.add('tabs-active');
-                label.textContent = "Norimas atlyginimas į rankas";
-            } else if (newMode === 'cost') {
-                btnCost.classList.remove('tabs-inactive');
-                btnCost.classList.add('tabs-active');
-                label.textContent = "Darbo vietos kaina";
-            }
-            
-            calculate();
         }
 
-        function formatCurrency(num) {
-            return num.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-        }
+        // Event listeners
+        document.getElementById('calc-vat-rate').addEventListener('change', calculateVAT);
+        document.getElementById('calc-price-excl').addEventListener('input', calculateVAT);
 
-        function formatPercentage(num) {
-            return (num * 100).toFixed(2) + '%';
-        }
+        document.getElementById('deduct-vat-rate').addEventListener('change', deductVAT);
+        document.getElementById('deduct-price-incl').addEventListener('input', deductVAT);
 
-        function calculate() {
-            // Get inputs
-            const amountStr = document.getElementById('salaryInput').value;
-            const amount = parseFloat(amountStr) || 0;
-            
-            state.npdType = document.getElementById('npdSelect').value;
-            state.pensionRate = parseFloat(document.getElementById('pensionSelect').value) / 100;
-            state.contractType = document.getElementById('contractType').value;
-            state.employerType = document.getElementById('employerType').value;
-            state.employerGroup = document.getElementById('employerGroup').value;
-            state.year = document.getElementById('yearSelect').value;
-
-            let data;
-            if (state.mode === 'gross') {
-                data = calculateFromGross(amount);
-            } else if (state.mode === 'net') {
-                data = calculateFromNet(amount);
-            } else if (state.mode === 'cost') {
-                data = calculateFromCost(amount);
-            }
-
-            // Render Results
-            document.getElementById('resGross').textContent = formatCurrency(data.gross);
-            document.getElementById('resNet').textContent = formatCurrency(data.net);
-            document.getElementById('resTotalCost').textContent = formatCurrency(data.totalCost);
-            document.getElementById('resNPD').textContent = formatCurrency(data.npd);
-            
-            document.getElementById('resGPM').textContent = "- " + formatCurrency(data.gpm);
-            document.getElementById('resPSD').textContent = "- " + formatCurrency(data.psd);
-            document.getElementById('resVSD').textContent = "- " + formatCurrency(data.vsd);
-            
-            // Pension Row Visibility
-            const pensionRow = document.getElementById('rowPension');
-            if (data.pension > 0) {
-                pensionRow.classList.remove('hidden');
-                document.getElementById('resPension').textContent = "- " + formatCurrency(data.pension);
-            } else {
-                pensionRow.classList.add('hidden');
-            }
-
-            document.getElementById('resEmployerTax').textContent = formatCurrency(data.employerTax);
-            document.getElementById('employerRateText').textContent = formatPercentage(data.employerRate) + " (ant viršaus)";
-            
-            // Payment information
-            document.getElementById('resSodra').textContent = formatCurrency(data.sodraPayment);
-            document.getElementById('resVMI').textContent = formatCurrency(data.vmiPayment);
-        }
-
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Listeners
-            document.getElementById('salaryInput').addEventListener('input', calculate);
-            document.getElementById('npdSelect').addEventListener('change', calculate);
-            document.getElementById('pensionSelect').addEventListener('change', calculate);
-            document.getElementById('contractType').addEventListener('change', calculate);
-            document.getElementById('employerType').addEventListener('change', calculate);
-            document.getElementById('employerGroup').addEventListener('change', calculate);
-            document.getElementById('yearSelect').addEventListener('change', calculate);
-            
-            // Initial Calc
-            calculate();
-        });
-
+        // Initialize
+        calculateVAT();
+        deductVAT();
     </script>
 </body>
-
 </html>
