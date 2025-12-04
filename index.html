@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlyginimo Skaičiuoklė 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #10B981;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #10B981;
+        }
+        /* Custom number input styling */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease;
+        }
+        .card-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background-color: #1F2937;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1F2937 transparent transparent transparent;
+        }
+        .result-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .employer-highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .employee-highlight {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .tabs-active {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .tabs-inactive {
+            background-color: #F3F4F6;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-calculator text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">Atlyginimo Skaičiuoklė <span class="text-blue-600">2025</span></h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-sm text-gray-500 font-medium">Lietuva 🇱🇹</div>
+                <a href="/minimali-alga" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Minimali alga</a>
+                <a href="/istoriniai-duomenys-npd" class="text-sm text-blue-600 hover:text-blue-800 font-medium">NPD duomenys</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left Panel - Inputs -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- Card - Main Inputs -->
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Duomenų įvedimas</h2>
+                    
+                    <!-- Calculation Type Tabs -->
+                    <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+                        <button id="btnGross" class="flex-1 py-2 text-sm font-medium rounded-lg shadow-sm tabs-active transition-all duration-200" onclick="setMode('gross')">Ant popieriaus</button>
+                        <button id="btnNet" class="flex-1 py-2 text-sm font-medium rounded-lg tabs-inactive transition-all duration-200" onclick="setMode('net')">Į rankas</button>
+                        <button id="btnCost" class="flex-1 py-2 text-sm font-medium rounded-lg tabs-inactive transition-all duration-200" onclick="setMode('cost')">Darbo vietos kaina</button>
+                    </div>
+
+                    <!-- Amount Input -->
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-gray-700 mb-2" id="amountLabel">Atlyginimas ant popieriaus</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <input type="number" id="salaryInput" class="block w-full pl-4 pr-12 py-3 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold text-gray-900 border" placeholder="0.00" value="1038">
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <span class="text-gray-500 font-medium">€</span>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">MMA (2025 m.): 1038 €</p>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="space-y-4">
+                        
+                        <!-- NPD Settings -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Neapmokestinamas pajamų dydis (NPD)
+                                <span class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">NPD taikomas tik tuo atveju, jeigu darbuotojas darbdaviui pateikia prašymą jį taikyti.</span>
+                                </span>
+                            </label>
+                            <select id="npdSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="auto">Taikomas standartinis</option>
+                                <option value="0">Netaikomas</option>
+                                <option value="disabled">Riboto darbingumo (0-25%)</option>
+                                <option value="partial">Riboto darbingumo (30-55%)</option>
+                            </select>
+                        </div>
+
+                        <!-- Pension -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Papildomas pensijos kaupimas
+                                <span class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Darbuotojo kaupimas papildomam pensijų draudimui</span>
+                                </span>
+                            </label>
+                            <select id="pensionSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="0">Nekaupia (0%)</option>
+                                <option value="1.5">Kaupia palaipsniui (1.5%)</option>
+                                <option value="3">Kaupia maksimaliai (3%)</option>
+                            </select>
+                        </div>
+
+                        <!-- Contract Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sutarties tipas</label>
+                            <select id="contractType" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="indefinite">Neterminuota</option>
+                                <option value="fixed">Terminuota</option>
+                            </select>
+                        </div>
+
+                        <!-- Employer Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Darbdavio tipas</label>
+                            <select id="employerType" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="private">Privatus</option>
+                                <option value="state">Valstybės</option>
+                                <option value="municipality">Savivaldybės</option>
+                            </select>
+                        </div>
+
+                        <!-- Employer Group -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Darbdavio grupė
+                                <span class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Dauguma darbdavių priklauso I grupei. Kitoms grupėms darbdavys priskiriamas jeigu yra įvykę nelaimingų atsitikimų.</span>
+                                </span>
+                            </label>
+                            <select id="employerGroup" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="1">I grupė</option>
+                                <option value="2">II grupė</option>
+                                <option value="3">III grupė</option>
+                            </select>
+                        </div>
+
+                        <!-- Year Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Metai</label>
+                            <select id="yearSelect" class="block w-full py-2.5 px-3 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Button -->
+                    <button onclick="calculate()" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 flex items-center justify-center space-x-2">
+                        <span>Skaičiuoti</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-blue-50 rounded-xl p-4 border border-blue-100 text-sm text-blue-800">
+                    <div class="flex items-start space-x-2">
+                        <i class="fa-solid fa-circle-info mt-1"></i>
+                        <p>Skaičiavimai atliekami pagal <strong>2025 m.</strong> sausio 1 d. įsigaliojusias mokesčių tarykles (MMA 1038 €, naujos NPD formulės).</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Panel - Results -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Main Result Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-blue-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Į Rankas (Neto)</p>
+                        <p id="resNet" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
+                        <p class="text-xs text-green-600 mt-1 flex items-center font-medium">
+                            <i class="fa-solid fa-check mr-1"></i> Išmokama darbuotojui
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-gray-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Ant Popieriaus (Bruto)</p>
+                        <p id="resGross" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
+                        <p class="text-xs text-gray-500 mt-1">Sutartyje numatytas atlygis</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl card-shadow relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 -mt-2 -mr-2 w-16 h-16 bg-purple-100 rounded-full opacity-50 blur-xl group-hover:scale-110 transition-transform"></div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide">Darbo Vietos Kaina</p>
+                        <p id="resTotalCost" class="text-3xl font-bold text-gray-900 mt-1">0.00 €</p>
+                        <p class="text-xs text-purple-600 mt-1 flex items-center font-medium">
+                            <i class="fa-solid fa-building mr-1"></i> Darbdavio išlaidos
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Detailed Breakdown -->
+                <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                        <h3 class="font-semibold text-gray-800">Mokesčių Išklotinė</h3>
+                        <span class="text-xs font-mono bg-gray-200 text-gray-600 px-2 py-1 rounded">EUR</span>
+                    </div>
+                    
+                    <div class="divide-y divide-gray-100">
+                        <!-- NPD Row -->
+                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs">
+                                    NPD
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Taikytas NPD</p>
+                                    <p class="text-xs text-gray-400">Neapmokestinamas pajamų dydis</p>
+                                </div>
+                            </div>
+                            <span id="resNPD" class="text-sm font-semibold text-gray-700">0.00 €</span>
+                        </div>
+
+                        <!-- GPM Row -->
+                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
+                                    GPM
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Gyventojų pajamų mokestis</p>
+                                    <p class="text-xs text-gray-400">20% (nuo sumos virš NPD)</p>
+                                </div>
+                            </div>
+                            <span id="resGPM" class="text-sm font-semibold text-red-600">- 0.00 €</span>
+                        </div>
+
+                        <!-- PSD Row -->
+                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
+                                    PSD
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Privalomas sveikatos draudimas</p>
+                                    <p class="text-xs text-gray-400">6.98%</p>
+                                </div>
+                            </div>
+                            <span id="resPSD" class="text-sm font-semibold text-red-600">- 0.00 €</span>
+                        </div>
+
+                        <!-- VSD Row -->
+                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-xs">
+                                    VSD
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Valstybinis socialinis draudimas</p>
+                                    <p class="text-xs text-gray-400">12.52%</p>
+                                </div>
+                            </div>
+                            <span id="resVSD" class="text-sm font-semibold text-red-600">- 0.00 €</span>
+                        </div>
+
+                        <!-- Pension Row (Conditional) -->
+                        <div id="rowPension" class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors bg-orange-50/30 hidden">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 text-xs">
+                                    II
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Pensijų kaupimas</p>
+                                    <p class="text-xs text-gray-400">Papildomai</p>
+                                </div>
+                            </div>
+                            <span id="resPension" class="text-sm font-semibold text-orange-600">- 0.00 €</span>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="h-1 bg-gray-50 border-t border-b border-gray-100"></div>
+
+                        <!-- Employer Tax Row -->
+                        <div class="flex justify-between items-center px-6 py-3 hover:bg-gray-50 transition-colors bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">
+                                    <i class="fa-solid fa-building"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Darbdavio mokesčiai (Sodra)</p>
+                                    <p class="text-xs text-gray-400" id="employerRateText">1.77% (ant viršaus)</p>
+                                </div>
+                            </div>
+                            <span id="resEmployerTax" class="text-sm font-semibold text-gray-700">0.00 €</span>
+                        </div>
+
+                        <!-- Payment Information -->
+                        <div class="bg-gray-50 p-4">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-3">Mokėjimo informacija</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white p-3 rounded-lg border border-gray-200">
+                                    <p class="text-xs text-gray-500 mb-1">Sodrai mokėtina suma</p>
+                                    <p id="resSodra" class="text-sm font-semibold text-gray-800">0.00 €</p>
+                                    <p class="text-xs text-gray-400 mt-1">Įmokos kodas 252</p>
+                                    <a href="https://www.sodra.lt/surenkamosios-saskaitos" target="_blank" class="text-xs text-blue-600 hover:underline">Sodros sąskaitos</a>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-gray-200">
+                                    <p class="text-xs text-gray-500 mb-1">Mokesčių inspekcijai mokėtina suma</p>
+                                    <p id="resVMI" class="text-sm font-semibold text-gray-800">0.00 €</p>
+                                    <p class="text-xs text-gray-400 mt-1">Įmokos kodas 1311</p>
+                                    <a href="https://www.vmi.lt/evmi/saskaitos-ir-imoku-kodai" target="_blank" class="text-xs text-blue-600 hover:underline">VMI sąskaitos</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="bg-white rounded-xl card-shadow p-6">
+                    <h3 class="font-semibold text-gray-800 mb-4">Mokesčių tarifai (2025 m.)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mokestis</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarifas</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mokėtojas</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Gyventojų pajamų mokestis (GPM)</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">20%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Privalomas sveikatos draudimas (PSD)</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">6.98%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Valstybinis socialinis draudimas (VSD)</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">12.52%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbdavio VSD įmoka</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">1.77%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbdavys</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Papildomas pensijų kaupimas</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">1.5% arba 3%</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">Darbuotojas</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center text-gray-400 text-xs">
+            <p>© 2025 Atlyginimo Skaičiuoklė. Informacinio pobūdžio. Patikrino audito įmonė UAB "Tezaurus auditas".</p>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Constants 2025 ---
+        const CONSTANTS = {
+            MMA: 1038,
+            NPD_BASE_1: 747,
+            NPD_LIMIT_1: 1038, // Up to this, fixed 747
+            NPD_LIMIT_2: 2387.29, // Threshold for formula change
+            NPD_FORMULA_1_FACTOR: 0.49,
+            NPD_FORMULA_2_BASE: 400,
+            NPD_FORMULA_2_SUBTRACT: 642,
+            NPD_FORMULA_2_FACTOR: 0.18,
+            NPD_DISABLED: 1127, // For 0-25% work capacity
+            NPD_PARTIAL: 1057, // For 30-55% work capacity
+            
+            RATE_GPM: 0.20,
+            RATE_PSD: 0.0698,
+            RATE_VSD: 0.1252,
+            RATE_EMPLOYER_1: 0.0177, // Group 1
+            RATE_EMPLOYER_2: 0.0217, // Group 2
+            RATE_EMPLOYER_3: 0.0277, // Group 3
+        };
+
+        // --- State ---
+        let state = {
+            mode: 'gross', // 'gross', 'net', or 'cost'
+            amount: 1038,
+            npdType: 'auto', // 'auto', '0', 'disabled', 'partial'
+            pensionRate: 0.0,
+            contractType: 'indefinite', // 'indefinite' or 'fixed'
+            employerType: 'private', // 'private', 'state', 'municipality'
+            employerGroup: '1', // '1', '2', or '3'
+            year: '2025'
+        };
+
+        // --- Core Logic ---
+
+        function calculateNPD(gross) {
+            if (state.npdType === '0') return 0;
+            if (state.npdType === 'disabled') return CONSTANTS.NPD_DISABLED;
+            if (state.npdType === 'partial') return CONSTANTS.NPD_PARTIAL;
+            
+            // Auto NPD calculation
+            if (gross <= 0) return 0;
+
+            let npd = 0;
+
+            if (gross <= CONSTANTS.NPD_LIMIT_1) {
+                // Formula: Fixed 747
+                npd = CONSTANTS.NPD_BASE_1;
+            } else if (gross <= CONSTANTS.NPD_LIMIT_2) {
+                // Formula: 747 - 0.49 * (Gross - 1038)
+                npd = CONSTANTS.NPD_BASE_1 - CONSTANTS.NPD_FORMULA_1_FACTOR * (gross - CONSTANTS.NPD_LIMIT_1);
+            } else {
+                // Formula: 400 - 0.18 * (Gross - 642)
+                npd = CONSTANTS.NPD_FORMULA_2_BASE - CONSTANTS.NPD_FORMULA_2_FACTOR * (gross - CONSTANTS.NPD_FORMULA_2_SUBTRACT);
+            }
+
+            // NPD cannot be negative or larger than gross (practically)
+            // Actually tax cannot be negative. If NPD > Gross, Tax Base is 0.
+            return Math.max(0, npd);
+        }
+
+        function getEmployerRate() {
+            switch (state.employerGroup) {
+                case '1': return CONSTANTS.RATE_EMPLOYER_1;
+                case '2': return CONSTANTS.RATE_EMPLOYER_2;
+                case '3': return CONSTANTS.RATE_EMPLOYER_3;
+                default: return CONSTANTS.RATE_EMPLOYER_1;
+            }
+        }
+
+        function calculateFromGross(gross) {
+            const npd = calculateNPD(gross);
+            const taxBaseGPM = Math.max(0, gross - npd);
+            
+            const gpm = taxBaseGPM * CONSTANTS.RATE_GPM;
+            const psd = gross * CONSTANTS.RATE_PSD;
+            const vsd = gross * CONSTANTS.RATE_VSD;
+            const pension = gross * state.pensionRate;
+            
+            const totalDeductions = gpm + psd + vsd + pension;
+            const net = gross - totalDeductions;
+            
+            const employerRate = getEmployerRate();
+            const employerTax = gross * employerRate;
+            const totalCost = gross + employerTax;
+            
+            // Calculate Sodra and VMI payment amounts
+            const sodraPayment = vsd + psd + employerTax;
+            const vmiPayment = gpm;
+
+            return {
+                gross: gross,
+                net: net,
+                npd: npd,
+                gpm: gpm,
+                psd: psd,
+                vsd: vsd,
+                pension: pension,
+                employerTax: employerTax,
+                totalCost: totalCost,
+                sodraPayment: sodraPayment,
+                vmiPayment: vmiPayment,
+                employerRate: employerRate
+            };
+        }
+
+        function calculateFromNet(targetNet) {
+            // Binary search to find Gross that yields this Net
+            let low = targetNet; 
+            let high = targetNet * 2.5; // Initial estimation range
+            let gross = low;
+            let result = null;
+            
+            // Expand range if needed
+            let iterations = 0;
+            while (calculateFromGross(high).net < targetNet && iterations < 20) {
+                high *= 1.5;
+                iterations++;
+            }
+
+            // Binary search
+            for (let i = 0; i < 50; i++) {
+                gross = (low + high) / 2;
+                result = calculateFromGross(gross);
+                
+                if (Math.abs(result.net - targetNet) < 0.01) {
+                    break;
+                }
+                
+                if (result.net < targetNet) {
+                    low = gross;
+                } else {
+                    high = gross;
+                }
+            }
+            
+            return result;
+        }
+
+        function calculateFromCost(targetCost) {
+            // Binary search to find Gross that yields this Cost
+            let low = targetCost * 0.8; // Initial estimation range
+            let high = targetCost;
+            let gross = low;
+            let result = null;
+            
+            // Binary search
+            for (let i = 0; i < 50; i++) {
+                gross = (low + high) / 2;
+                result = calculateFromGross(gross);
+                
+                if (Math.abs(result.totalCost - targetCost) < 0.01) {
+                    break;
+                }
+                
+                if (result.totalCost < targetCost) {
+                    low = gross;
+                } else {
+                    high = gross;
+                }
+            }
+            
+            return result;
+        }
+
+        // --- UI Handling ---
+
+        function setMode(newMode) {
+            state.mode = newMode;
+            
+            const btnGross = document.getElementById('btnGross');
+            const btnNet = document.getElementById('btnNet');
+            const btnCost = document.getElementById('btnCost');
+            const label = document.getElementById('amountLabel');
+
+            // Reset all buttons
+            [btnGross, btnNet, btnCost].forEach(btn => {
+                btn.classList.remove('tabs-active');
+                btn.classList.add('tabs-inactive');
+            });
+            
+            // Activate selected button
+            if (newMode === 'gross') {
+                btnGross.classList.remove('tabs-inactive');
+                btnGross.classList.add('tabs-active');
+                label.textContent = "Atlyginimas ant popieriaus";
+            } else if (newMode === 'net') {
+                btnNet.classList.remove('tabs-inactive');
+                btnNet.classList.add('tabs-active');
+                label.textContent = "Norimas atlyginimas į rankas";
+            } else if (newMode === 'cost') {
+                btnCost.classList.remove('tabs-inactive');
+                btnCost.classList.add('tabs-active');
+                label.textContent = "Darbo vietos kaina";
+            }
+            
+            calculate();
+        }
+
+        function formatCurrency(num) {
+            return num.toLocaleString('lt-LT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        }
+
+        function formatPercentage(num) {
+            return (num * 100).toFixed(2) + '%';
+        }
+
+        function calculate() {
+            // Get inputs
+            const amountStr = document.getElementById('salaryInput').value;
+            const amount = parseFloat(amountStr) || 0;
+            
+            state.npdType = document.getElementById('npdSelect').value;
+            state.pensionRate = parseFloat(document.getElementById('pensionSelect').value) / 100;
+            state.contractType = document.getElementById('contractType').value;
+            state.employerType = document.getElementById('employerType').value;
+            state.employerGroup = document.getElementById('employerGroup').value;
+            state.year = document.getElementById('yearSelect').value;
+
+            let data;
+            if (state.mode === 'gross') {
+                data = calculateFromGross(amount);
+            } else if (state.mode === 'net') {
+                data = calculateFromNet(amount);
+            } else if (state.mode === 'cost') {
+                data = calculateFromCost(amount);
+            }
+
+            // Render Results
+            document.getElementById('resGross').textContent = formatCurrency(data.gross);
+            document.getElementById('resNet').textContent = formatCurrency(data.net);
+            document.getElementById('resTotalCost').textContent = formatCurrency(data.totalCost);
+            document.getElementById('resNPD').textContent = formatCurrency(data.npd);
+            
+            document.getElementById('resGPM').textContent = "- " + formatCurrency(data.gpm);
+            document.getElementById('resPSD').textContent = "- " + formatCurrency(data.psd);
+            document.getElementById('resVSD').textContent = "- " + formatCurrency(data.vsd);
+            
+            // Pension Row Visibility
+            const pensionRow = document.getElementById('rowPension');
+            if (data.pension > 0) {
+                pensionRow.classList.remove('hidden');
+                document.getElementById('resPension').textContent = "- " + formatCurrency(data.pension);
+            } else {
+                pensionRow.classList.add('hidden');
+            }
+
+            document.getElementById('resEmployerTax').textContent = formatCurrency(data.employerTax);
+            document.getElementById('employerRateText').textContent = formatPercentage(data.employerRate) + " (ant viršaus)";
+            
+            // Payment information
+            document.getElementById('resSodra').textContent = formatCurrency(data.sodraPayment);
+            document.getElementById('resVMI').textContent = formatCurrency(data.vmiPayment);
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Listeners
+            document.getElementById('salaryInput').addEventListener('input', calculate);
+            document.getElementById('npdSelect').addEventListener('change', calculate);
+            document.getElementById('pensionSelect').addEventListener('change', calculate);
+            document.getElementById('contractType').addEventListener('change', calculate);
+            document.getElementById('employerType').addEventListener('change', calculate);
+            document.getElementById('employerGroup').addEventListener('change', calculate);
+            document.getElementById('yearSelect').addEventListener('change', calculate);
+            
+            // Initial Calc
+            calculate();
+        });
+
+    </script>
+</body>
+</html>
